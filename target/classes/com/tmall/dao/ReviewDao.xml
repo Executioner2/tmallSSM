@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmall.dao.ReviewDao">
+    <resultMap id="reviewBean" type="Review">
+        <id column="rid" property="id"/>
+        <result column="content" property="content"/>
+        <result column="createDate" property="createDate"/>
+        <association property="user" javaType="User">
+            <id column="uid" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+
+    <delete id="deleteReviewByProduct">
+        delete from review where pid in
+        <foreach collection="list" separator="," open="(" close=")" item="product" index="index">
+            #{product.id}
+        </foreach>
+    </delete>
+
+    <select id="listReviewByProduct" parameterType="Product" resultMap="reviewBean">
+        select r.id rid, content, createDate, u.id uid, name
+        from review r left join user u on r.uid = u.id where r.pid = #{id} order by createDate desc
+    </select>
+
+    <insert id="addReview" parameterType="Review">
+        insert into review(content, uid, pid) values(#{content}, #{user.id}, #{product.id})
+    </insert>
+</mapper>

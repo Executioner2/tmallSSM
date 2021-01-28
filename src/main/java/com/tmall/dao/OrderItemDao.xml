@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmall.dao.OrderItemDao">
+    <resultMap id="orderItemBean" type="OrderItem">
+        <id column="oiid" property="id"/>
+        <result column="number" property="number"/>
+        <association property="product" javaType="Product">
+            <id column="pid" property="id"/>
+            <result column="pname" property="name"/>
+            <result column="subTitle" property="subTitle"/>
+            <result column="orignalPrice" property="orignalPrice"/>
+            <result column="promotePrice" property="promotePrice"/>
+            <result column="stock" property="stock"/>
+            <result column="createDate" property="createDate"/>
+            <association property="singleImageFirst" javaType="ProductImage">
+                <id column="piid" property="id"/>
+                <result column="type" property="type"/>
+            </association>
+        </association>
+        <association property="user" javaType="User">
+            <id column="uid" property="id"/>
+            <result column="uname" property="name"/>
+        </association>
+    </resultMap>
+
+    <select id="listOrderItem" resultMap="orderItemBean">
+        select
+        oi.id oiid, number, p.id pid, p.name pname, subTitle, orignalPrice,
+        promotePrice, stock, createDate, pi.id piid, type, u.id uid, u.name uname
+        from orderItem oi left join product p on oi.pid = p.id
+        left join productImage pi on p.id = pi.pid left join user u on oi.uid = u.id
+        <where>
+            <choose>
+                <when test="oid != null">
+                    oi.oid = #{oid}
+                </when>
+                <when test="uid != null">
+                    oi.uid = #{uid} and oi.oid is null
+                </when>
+                <when test="oiids != null">
+                    <foreach collection="oiids" separator="," open="oi.id in (" close=")" item="id">
+                        #{id}
+                    </foreach>
+                </when>
+            </choose>
+            and type = 'singleImage' GROUP BY oi.id
+        </where>
+    </select>
+
+    <select id="getCountByUser" resultType="int" parameterType="User">
+        select sum(number) from orderitem o left join user u on o.uid = u.id where o.oid is null and u.id = #{id}
+    </select>
+
+    <insert id="addOrderItem" parameterType="OrderItem" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into orderItem(pid, uid, number) values(#{product.id}, #{user.id}, #{number})
+    </insert>
+
+    <select id="checkRepetition" resultType="int">
+        select sum(number) from orderItem where uid = #{uid} and pid = #{pid} and oid is null
+    </select>
+
+    <update id="updateOrderItemNumber" parameterType="OrderItem">
+        <selectKey resultType="int" order="AFTER" keyProperty="id">
+            select id from orderItem where oid is null and uid = #{user.id}
+            <choose>
+                <when test="product != null and product.id != null">
+                    and pid = #{product.id}
+                </when>
+                <when test="id != null">
+                    and id = #{id}
+                </when>
+            </choose>
+        </selectKey>
+
+        update orderItem set number = #{number}
+        <where>
+            <choose>
+                <when test="product != null and product.id != null">
+                    pid = #{product.id}
+                </when>
+                <when test="id != null">
+                    id = #{id}
+                </when>
+            </choose>
+            and oid is null and uid = #{user.id}
+        </where>
+    </update>
+
+    <delete id="deleteOrderItem" parameterType="map">
+        delete from orderItem where
+        <choose>
+            <when test="id != null">
+                id = #{id}
+            </when>
+            <when test="oid != null">
+                oid = #{oid}
+            </when>
+        </choose>
+        and uid = #{uid}
+    </delete>
+
+    <select id="checkOrderItemLegal" resultMap="orderItemBean">
+        select oi.id oiid, number, p.id pid, promotePrice, stock
+        from orderItem oi  left  join product p on oi.pid = p.id
+        where oi.id = #{id} and oi.uid = #{uid}
+    </select>
+
+    <update id="updateOrderItemOid">
+        update orderItem set oid = #{oid}
+        where
+        <foreach collection="oiids" item="id" open="id in (" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

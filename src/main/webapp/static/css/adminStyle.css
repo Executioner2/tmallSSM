@@ -1,0 +1,397 @@
+/*下面是nav的CSS*/
+#tmallAdminNav{
+    width: 100%;
+    background-color: #222222;
+}
+#tmallAdminNav .tmallbuyPng{
+    height: 45px; !important;
+    margin: 0px 10px 5px 10px;
+}
+#tmallAdminNav>a{
+    font-size: 18px;
+    color: #95979D;
+    text-decoration: none;
+    margin: 0px 10px;
+}
+#tmallAdminNav a:hover{
+    color: white;
+}
+
+/*下面是分页的CSS*/
+div.pageDiv{
+    text-align: center;
+}
+
+/*下面是addDiv的CSS*/
+div.addDiv{
+    width: 400px;
+    margin: 0 auto;
+}
+div.addDiv .addTable td:first-child{
+    width: 25%;
+}
+div.addDiv .addTable tr{
+    height: 40px;
+}
+div.addDiv .addTable tr:last-child{
+    text-align: center;
+}
+
+/*下面是breadcrumb的CSS*/
+.breadcrumb{
+    margin: 20px 40px;
+    background-color: #F5F5F5;
+    border-radius: 5px;
+}
+.breadcrumb .gaySpan{
+    margin: 0px 5px;
+    color: #CCCFD8;
+}
+.breadcrumb .gaySpanText{
+    color: #777777;
+}
+
+/*=======================分割线==========================*/
+/*================上面是公共页面模块的CSS===================*/
+/*=======================分割线==========================*/
+
+
+/*=======================分割线======================*/
+
+
+/*=======================分割线==========================*/
+/*=================下面是分类管理页面的CSS==================*/
+/*=======================分割线==========================*/
+
+/*下面是分类管理的CSS*/
+#sortManagement{
+    width: 100%;
+    padding: 0px 40px;
+}
+#sortManagement .title{
+    background-color: #5BC0DE;
+    text-align: center;
+    width: 60px;
+    line-height:18px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 12px;
+    color: white;
+    margin: 20px 0;
+}
+#sortManagement .table-striped .tableHead{
+    background-color: #DFF0D8;
+}
+#sortManagement .table-striped .tableHead th:nth-child(1){
+    width: 3%;
+}
+#sortManagement .table-striped .tableHead th:nth-child(3){
+    width: 9%;
+}
+#sortManagement .table-striped .tableHead th:nth-child(4){
+    width: 9%;
+}
+#sortManagement .table-striped .tableHead th:nth-child(5){
+    width: 9%;
+}
+#sortManagement .table-striped .tableHead th:nth-child(6){
+    width: 5%;
+}
+#sortManagement .table-striped .tableHead th:nth-child(7){
+    width: 5%;
+}
+#sortManagement .table-striped .categoryItem .titleImage{
+    height: 40px;!important;
+}
+/*=======================分割线==========================*/
+/*=================上面是分类管理页面的CSS==================*/
+/*=======================分割线==========================*/
+
+
+/*=======================分割线==========================*/
+/*=================下面是分类编辑页面的CSS==================*/
+/*=======================分割线==========================*/
+
+/*下面是editCategory的CSS*/
+#editCategory{
+    width: 100%;
+}
+#editCategory .editDiv{
+    width: 400px;
+    margin: 20px auto;
+}
+#editCategory .editDiv .editTable{
+    width: 100%;
+}
+#editCategory .editDiv .editTable td:first-child{
+    width: 30%;
+}
+#editCategory .editDiv .editTable input{
+    width: 280px;
+}
+#editCategory .editDiv .editTable tr{
+    height: 40px;
+}
+#editCategory .editDiv .editTable tr:last-child{
+    text-align: center;
+}
+/*=======================分割线==========================*/
+/*=================上面是分类编辑页面的CSS==================*/
+/*=======================分割线==========================*/
+
+
+/*=======================分割线==========================*/
+/*=================下面是属性管理页面的CSS==================*/
+/*=======================分割线==========================*/
+
+/*这里是属性管理的CSS*/
+#propertyManager{
+    width: 100%;
+    padding: 0 40px;
+    font-size: 14px;
+}
+#propertyManager .table-striped .tableHead{
+    background-color: #DFF0D8;
+    font-size: 14px;
+}
+#propertyManager .table-striped th:first-child{
+    width: 13%;
+}
+#propertyManager .table-striped th:nth-child(3){
+    width: 20%;
+}
+#propertyManager .table-striped th:nth-child(4){
+    width: 20%;
+}
+
+/*=======================分割线==========================*/
+/*=================上面是属性管理页面的CSS==================*/
+/*=======================分割线==========================*/
+
+
+/*=======================分割线==========================*/
+/*=================下面是产品管理页面的CSS==================*/
+/*=======================分割线==========================*/
+
+#productManger{
+    width: 100%;
+    padding: 0 40px;
+}
+#productManger .table-striped .tableHead{
+    background-color: #DFF0D8;
+}
+#productManger .table-striped td{
+    font-size: 14px;
+}
+#productManger .table-striped th:nth-child(1){
+    width: 2%;
+}
+#productManger .table-striped th:nth-child(2){
+    width: 4%;
+}
+#productManger .table-striped th:nth-child(3){
+    width: 32%;
+}
+#productManger .table-striped th:nth-child(4){
+    width: 21%;
+}
+
+/*=======================分割线==========================*/
+/*=================上面是产品管理页面的CSS==================*/
+/*=======================分割线==========================*/
+
+
+/*=======================分割线==========================*/
+/*=================下面是产品图片页面的CSS==================*/
+/*=======================分割线==========================*/
+
+/*下面是产品图片管理页面的CSS*/
+#productImageManager{
+    width: 100%;
+    text-align: center;
+}
+#productImageManager .addDiv{
+    display: inline-block;
+    margin: 0px 100px;
+}
+#productImageManager .addDiv .addForm div, #productImageManager input, #productImageManager button{
+    margin: 20px;
+}
+#productImageManager .addDiv .addForm input{
+    margin-bottom: 0px;
+}
+#productImageManager .tableHead{
+    background-color: #DFF0D8;
+}
+
+/*=======================分割线==========================*/
+/*=================上面是产品图片页面的CSS==================*/
+/*=======================分割线==========================*/
+
+
+/*=======================分割线==========================*/
+/*=================下面是产品属性页面的CSS==================*/
+/*=======================分割线==========================*/
+
+/*下面是产品属性编辑页面的CSS*/
+#editPropertyValue{
+    width: 100%;
+}
+#editPropertyValue .editDiv{
+    width: 650px;
+    margin: 0 auto;
+}
+#editPropertyValue .editDiv div{
+    display: inline-block;
+}
+#editPropertyValue .editItem{
+    height: 40px;
+}
+#editPropertyValue .editItem input{
+    border: #D3D3D3 1px solid;
+}
+#editPropertyValue .propertyName{
+    width: 90px;
+}
+
+/*=======================分割线==========================*/
+/*=================上面是产品属性页面的CSS==================*/
+/*=======================分割线==========================*/
+
+
+/*=======================分割线==========================*/
+/*=================下面是用户管理页面的CSS==================*/
+/*=======================分割线==========================*/
+
+/*下面是用户管理的CSS*/
+#userManager{
+    width: 100%;
+    padding: 0px 40px;
+}
+#userManager .title{
+    background-color: #5BC0DE;
+    text-align: center;
+    width: 60px;
+    line-height:18px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 12px;
+    color: white;
+    margin: 20px 0;
+}
+#userManager table{
+    font-size: 14px;
+}
+#userManager .tableHead{
+    background-color: #DFF0D8;
+}
+
+/*=======================分割线==========================*/
+/*=================上面是用户管理页面的CSS==================*/
+/*=======================分割线==========================*/
+
+
+/*=======================分割线==========================*/
+/*=================下面是订单管理页面的CSS==================*/
+/*=======================分割线==========================*/
+
+/*下面是订单管理的CSS*/
+#orderManager{
+    width: 100%;
+    padding: 0px 40px;
+}
+#orderManager .title{
+    background-color: #5BC0DE;
+    text-align: center;
+    width: 60px;
+    line-height:18px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 12px;
+    color: white;
+    margin: 20px 0;
+}
+#orderManager table{
+    font-size: 14px;
+}
+#orderManager .tableHead{
+    background-color: #DFF0D8;
+}
+#orderManager .totalNumber{
+    text-align: center;
+}
+#orderManager th:nth-child(1), #orderManager th:nth-child(2){
+    width: 5%;
+}
+#orderManager th:nth-child(4), #orderManager th:nth-child(5){
+    width: 7%;
+}
+#orderManager th:nth-child(6), #orderManager th:nth-child(7),
+#orderManager th:nth-child(8),#orderManager th:nth-child(9){
+    width: 15%;
+}
+#orderManager .orderItemTr{
+    background-color: white;
+}
+#orderManager .orderItemTr td{
+    padding: 20px 0;
+}
+#orderManager .orderItemTr a{
+    display: inline-block;
+    width: 600px;
+    margin-left: 20px;
+}
+#orderManager .orderItemTr td div{
+    width: 900px;
+    padding-left: 30px;
+    margin: 10px auto;
+}
+#orderManager .orderItemTr .productNumber{
+    margin-right: 50px;
+    color: #777777;
+}
+#orderManager .orderItemTr .productPrice{
+    color: #777777;
+}
+
+/*=======================分割线==========================*/
+/*=================上面是订单管理页面的CSS==================*/
+/*=======================分割线==========================*/
+
+
+/*=======================分割线==========================*/
+/*=================下面是管理员注册页面的CSS==================*/
+/*=======================分割线==========================*/
+
+#adminRegister{
+    margin: 100px auto;
+    min-width: 350px;
+    width: 550px;
+}
+
+#adminRegister table input{
+    width: 220px;
+}
+
+#adminRegister table{
+    width: 80%;
+    margin: 10px auto;
+    height: 260px;
+}
+
+#adminRegister table tr td:first-child{
+    text-align: right;
+}
+
+#adminRegister table #buttonTr td{
+    text-align: center;
+}
+
+/*=======================分割线==========================*/
+/*=================上面是管理员注册页面的CSS==================*/
+/*=======================分割线==========================*/
+
+
+/*=======================分割线==========================*/
+/*=================上面是++++++页面的CSS==================*/
+/*=======================分割线==========================*/

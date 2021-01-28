@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmall.dao.CategoryDao">
+    <resultMap id="categoryBean" type="Category">
+        <id column="cid" property="id"/>
+        <result column="cname" property="name" />
+        <collection property="products" ofType="Product">
+            <id column="pid" property="id"/>
+            <result column="pname" property="name"/>
+            <result column="subTitle" property="subTitle"/>
+            <result column="orignalPrice" property="orignalPrice"/>
+            <result column="promotePrice" property="promotePrice"/>
+            <result column="stock" property="stock"/>
+            <result column="pcreateDate" property="createDate"/>
+            <collection property="reviews" ofType="Review">
+                <id column="rid" property="id"/>
+                <result column="rcontent" property="content"/>
+                <result column="rcreateDate" property="createDate"/>
+            </collection>
+            <collection property="propertyValues" ofType="PropertyValue">
+                <id column="ptvid" property="id"/>
+                <result column="value" property="value"/>
+            </collection>
+            <collection property="productImages" ofType="ProductImage">
+                <id column="piid" property="id"/>
+                <result column="type" property="type"/>
+            </collection>
+        </collection>
+        <collection property="properties" ofType="Property">
+            <id column="ptid" property="id"/>
+            <result column="ptname" property="name"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="listCategory" resultType="Category">
+        select id, name from category
+    </select>
+
+    <insert id="addCategory" parameterType="Category" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into category(name) values(#{name})
+    </insert>
+
+    <update id="editCategory" parameterType="Category">
+        update category set name = #{name} where id = #{id}
+    </update>
+
+    <delete id="deleteCategory" parameterType="Category">
+        delete from category where id = #{id}
+    </delete>
+
+    <select id="queryCategory" resultMap="categoryBean" parameterType="Category">
+        select subTitle, orignalPrice, promotePrice, stock, createDate pcreateDate
+        , c.name cname, c.id cid, p.name pname, p.id pid, pt.name ptname, pt.id ptid
+        from category c left join product p on c.id = p.cid left join property pt on pt.cid = c.id
+        where c.id = #{id};
+    </select>
+</mapper>

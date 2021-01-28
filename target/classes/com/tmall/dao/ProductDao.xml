@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmall.dao.ProductDao">
+    <resultMap id="productBean" type="Product">
+        <id column="pid" property="id"/>
+        <result column="pname" property="name"/>
+        <result column="subTitle" property="subTitle"/>
+        <result column="orignalPrice" property="orignalPrice"/>
+        <result column="promotePrice" property="promotePrice"/>
+        <result column="stock" property="stock"/>
+        <result column="pcreateDate" property="createDate"/>
+        <result column="salesVolume" property="salesVolume"/>
+        <result column="reviewNumber" property="reviewNumber"/>
+
+        <association property="category" javaType="Category">
+            <id column="cid" property="id"/>
+            <result column="cname" property="name"/>
+        </association>
+
+        <association property="singleImageFirst" javaType="ProductImage">
+            <id column="piid" property="id"/>
+            <result column="type" property="type"/>
+        </association>
+
+        <collection property="propertyValues" ofType="PropertyValue">
+            <id column="ptvid" property="id"/>
+            <result column="value" property="value"/>
+            <association property="property" javaType="Property">
+                <id column="ptid" property="id"/>
+                <result column="ptname" property="name"/>
+            </association>
+        </collection>
+    </resultMap>
+
+
+    <delete id="deleteProduct" parameterType="Product">
+        delete from product where id = #{id}
+    </delete>
+
+    <select id="listProduct" resultMap="productBean" parameterType="map">
+        SELECT
+            p.id pid,
+            p.name pname,
+            p.subTitle,
+            p.orignalPrice,
+            p.promotePrice,
+            p.stock,
+            p.createDate pcreateDate,
+            salesVolume,
+            reviewNumber,
+            pi.id piid,
+            type
+        FROM
+            product p
+        LEFT JOIN (
+            SELECT
+            p.id pid,
+            sum(number) salesVolume
+            FROM
+            product p
+            LEFT JOIN orderItem oi ON oi.pid = p.id
+            LEFT JOIN order_ o ON o.id = oi.oid
+            WHERE
+            (
+            o. STATUS = 'evaluate'
+            OR o. STATUS = 'accomplish'
+            )
+            GROUP BY
+            p.id
+        ) b ON b.pid = p.id
+        LEFT JOIN (
+            SELECT
+                pid,
+                count(*) reviewNumber
+            FROM
+                review
+            GROUP BY
+                pid
+        ) d ON d.pid = p.id
+        LEFT JOIN (
+            SELECT
+                id,
+                pid,
+                type
+            FROM
+                productImage
+            WHERE
+                type = 'singleImage'
+            GROUP BY pid
+        ) pi ON pi.pid = p.id
+        <where>
+            <if test="category != null">
+                p.cid = #{category.id}
+            </if>
+            <if test="keyword != null">
+                and p.name like #{keyword} or p.subTitle like #{keyword}
+            </if>
+            <if test="priceRight != null or priceLeft != null">
+                and promotePrice between #{priceLeft} and #{priceRight}
+            </if>
+            <if test="sort != null">
+                order by ${sort} ${order}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addProduct" parameterType="Product">
+        insert into product(name, subTitle, orignalPrice, promotePrice, stock, cid, createDate)
+        values(#{name}, #{subTitle}, #{orignalPrice}, #{promotePrice}, #{stock}, #{category.id}, #{createDate})
+    </insert>
+
+    <select id="queryProduct" parameterType="Product" resultMap="productBean">
+        select
+            p.id pid,p.name pname,subTitle,orignalPrice, promotePrice, stock,p.createDate pcreateDate,
+            ptv.id ptvid, value, pt.id ptid, pt.name ptname, reviewNumber, salesVolume,c.id cid, c.name cname
+        from product p
+        left join category c on p.cid = c.id
+        left join propertyvalue ptv on ptv.pid = p.id
+        left join property pt on pt.id = ptv.ptid
+        left join (select count(*)reviewNumber , pid from review where pid = #{id}) r on r.pid = p.id
+        left join (select count(o.confirmDate) salesVolume, pid from orderItem oi LEFT JOIN order_ o on o.id = oi.oid where oi.pid = #{id}) o on o.pid = p.id
+        where p.id = #{id}
+    </select>
+
+    <update id="updateProduct" parameterType="Product">
+        update
+        product set
+        name = #{name}, subTitle = #{subTitle}, orignalPrice = #{orignalPrice},
+        promotePrice = #{promotePrice}, stock = #{stock}
+        where id = #{id}
+    </update>
+
+    <!--更新商品库存-->
+    <update id="updateProductStock" parameterType="map">
+        update product set stock = ((select a.stock from (select stock from product where id = #{pid}) a) - #{number}) where id = #{pid}
+    </update>
+</mapper>

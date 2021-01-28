@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--controller 扫描器-->
+    <context:component-scan base-package="com.tmall.web.controller" />
+
+    <!--视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/view/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <!--处理json格式与静态资源文件冲突-->
+    <mvc:annotation-driven>
+        <!--解决json中文乱码-->
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>application/xml;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--访问静态资源文件-->
+    <mvc:default-servlet-handler />
+    
+    <!--拦截器-->
+    <mvc:interceptors>
+        <!--登录拦截器，禁止非法访问需要登录的页面-->
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/**"/>
+            <bean class="com.tmall.handler.AdminLoginInterceptor" />
+        </mvc:interceptor>
+        <!--前台用户资源拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/user/**"/>
+            <bean class="com.tmall.handler.UserLoginInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!--允许上传文件-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+</beans>

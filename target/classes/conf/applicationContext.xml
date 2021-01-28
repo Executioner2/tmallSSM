@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--加载jdbc配置文件-->
+    <context:property-placeholder location="classpath:conf/jdbc.properties" />
+
+    <!--连接池数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+    <!--配置sqlSessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:conf/mybatis-config.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+        <!--开启分页查询-->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!--声明扫描器，扫描dao-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="com.tmall.dao" />
+    </bean>
+
+    <!--注解驱动-->
+    <context:component-scan base-package="com.tmall.service" />
+    <context:component-scan base-package="com.tmall.web.controller" />
+
+    <!--事务，用注解的方式-->
+    <!--1、声明事务管理器-->
+   <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+       <property name="dataSource" ref="dataSource"/>
+   </bean>
+    <!--2、开启事务，用注解的方式-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--ModelAndView对象-->
+    <bean id="modelAndView" class="org.springframework.web.servlet.ModelAndView"/>
+
+    <!--全局异常处理驱动-->
+    <mvc:annotation-driven />
+
+    <!--切面对象-->
+    <bean id="aspectHandler" class="com.tmall.handler.AspectHandler"/>
+
+    <!--声明自动代理生成器-->
+    <aop:aspectj-autoproxy/>
+
+    <!--PageUtil-->
+    <bean id="pageUtil" class="com.tmall.utils.PageUtil" />
+
+</beans>
