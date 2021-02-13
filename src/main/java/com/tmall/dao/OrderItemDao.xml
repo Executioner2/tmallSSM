@@ -14,10 +14,6 @@
             <result column="promotePrice" property="promotePrice"/>
             <result column="stock" property="stock"/>
             <result column="createDate" property="createDate"/>
-            <association property="singleImageFirst" javaType="ProductImage">
-                <id column="piid" property="id"/>
-                <result column="type" property="type"/>
-            </association>
         </association>
         <association property="user" javaType="User">
             <id column="uid" property="id"/>
@@ -28,9 +24,8 @@
     <select id="listOrderItem" resultMap="orderItemBean">
         select
         oi.id oiid, number, p.id pid, p.name pname, subTitle, orignalPrice,
-        promotePrice, stock, createDate, pi.id piid, type, u.id uid, u.name uname
-        from orderItem oi left join product p on oi.pid = p.id
-        left join productImage pi on p.id = pi.pid left join user u on oi.uid = u.id
+        promotePrice, stock, createDate, u.id uid, u.name uname
+        from orderItem oi left join product p on oi.pid = p.id left join user u on oi.uid = u.id
         <where>
             <choose>
                 <when test="oid != null">
@@ -45,7 +40,6 @@
                     </foreach>
                 </when>
             </choose>
-            and type = 'singleImage' GROUP BY oi.id
         </where>
     </select>
 

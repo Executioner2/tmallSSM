@@ -29,10 +29,6 @@
                 <result column="pcreateDate" property="createDate"/>
                 <result column="salesVolume" property="salesVolume"/>
                 <result column="reviewNumber" property="reviewNumber"/>
-                <association property="singleImageFirst" javaType="ProductImage">
-                    <id column="piid" property="id"/>
-                    <result column="type" property="type"/>
-                </association>
             </association>
         </collection>
     </resultMap>
@@ -42,7 +38,7 @@
         userMessage, o.createDate, payDate, deliveryDate, confirmDate,
         status, oi.id oiid, number, reviewNumber, salesVolume,
         p.id pid, p.name pname, p.createDate pcreateDate, p.subTitle,
-        p.orignalPrice, p.promotePrice, p.stock, piid, type
+        p.orignalPrice, p.promotePrice, p.stock
         from order_ o left join orderItem oi on o.id = oi.oid
         left join product p on p.id = oi.pid
         LEFT JOIN (
@@ -83,24 +79,6 @@
             GROUP BY
                 pid
             ) temp1 ON temp1.pid = p.id
-        LEFT JOIN (
-            SELECT
-                pid,
-                pi.id piid,
-                type
-            FROM
-                productImage pi
-            WHERE
-                pid IN (
-            SELECT
-                pid
-            FROM
-                orderItem
-            )
-            AND type = 'singleImage'
-            GROUP BY
-                pid
-        ) temp2 ON temp2.pid = p.id
         <where>
             <if test="user != null">
                 and oi.uid = #{user.id}
@@ -149,9 +127,7 @@
             p.promotePrice,
             p.stock,
             salesVolume,
-            reviewNumber,
-            piid,
-            type
+            reviewNumber
         FROM
             order_ o
         LEFT JOIN orderItem oi ON o.id = oi.oid
@@ -198,26 +174,6 @@
             GROUP BY
                 pid
         ) temp2 ON temp2.pid = p.id
-        LEFT JOIN (
-            SELECT
-                pid,
-                pi.id piid,
-                type
-            FROM
-                productImage pi
-            WHERE
-                pid IN (
-                    SELECT
-                        pid
-                    FROM
-                        orderItem
-                    WHERE
-                        oid = #{id}
-                )
-            AND type = 'singleImage'
-            GROUP BY
-                pid
-        ) temp3 ON temp3.pid = p.id
         WHERE
             o.uid = #{user.id}
         AND o. STATUS = #{status}

@@ -39,7 +39,15 @@
 <body>
     <script>
         $(function () {
+            $("#adminLogin #userName").focus();
+
             $("#adminLogin #loginBtn").click(loginRequest);
+
+            $(window).keyup(function (event) {
+                if(event.keyCode == 13){
+                    loginRequest();
+                }
+            });
         });
 
         function loginRequest() {

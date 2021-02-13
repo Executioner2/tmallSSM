@@ -24,8 +24,6 @@ import java.util.Map;
 public class AspectHandler {
     @Resource
     private PageUtil pageUtil;
-    @Resource
-    private OrderDao orderDao;
 
     /**
      * 设置分页的切面

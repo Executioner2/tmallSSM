@@ -21,9 +21,17 @@
     <!--这里放登录页面主体部分-->
     <script>
         $(function () {
+            $("#username").focus();
+
             $("#loginBtn").click(login);
             $(window).click(function () {
                 $(".errorHint").css("visibility", "hidden");
+            });
+
+            $(window).keyup(function (event) {
+                if(event.keyCode == 13){
+                    login();
+                }
             });
         });
 

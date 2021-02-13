@@ -1,7 +1,9 @@
 package com.tmall.service.impl;
 
 import com.tmall.dao.OrderItemDao;
+import com.tmall.dao.ProductImageDao;
 import com.tmall.domain.OrderItem;
+import com.tmall.domain.ProductImage;
 import com.tmall.domain.User;
 import com.tmall.service.OrderItemService;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ import java.util.Map;
 public class OrderItemServiceImpl implements OrderItemService {
     @Resource
     private OrderItemDao orderItemDao;
+    @Resource
+    private ProductImageDao productImageDao;
 
     @Override
     @Transactional
@@ -40,7 +44,13 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public List<OrderItem> shoppingShow(User user) {
-        return orderItemDao.listOrderItem(null, user.getId(), null);
+        List<OrderItem> orderItems = orderItemDao.listOrderItem(null, user.getId(), null);
+        for (OrderItem oi : orderItems) {
+            ProductImage pi = productImageDao.queryProductImageFirst(oi.getProduct());
+            oi.getProduct().setSingleImageFirst(pi);
+        }
+
+        return orderItems;
     }
 
     @Override
@@ -60,6 +70,12 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public List<OrderItem> userSettlement(Integer[] oiids) {
-        return orderItemDao.listOrderItem(null, null, oiids);
+        List<OrderItem> orderItems = orderItemDao.listOrderItem(null, null, oiids);
+        for (OrderItem oi : orderItems) {
+            ProductImage pi = productImageDao.queryProductImageFirst(oi.getProduct());
+            oi.getProduct().setSingleImageFirst(pi);
+        }
+
+        return orderItems;
     }
 }

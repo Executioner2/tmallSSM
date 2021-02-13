@@ -23,4 +23,11 @@ public interface ProductImageDao {
     int deleteProductImage(ProductImage productImage);
 
     ProductImage queryProductImage(ProductImage productImage);
+
+    /**
+     * 获取产品第一个图片
+     * @param product
+     * @return
+     */
+    ProductImage queryProductImageFirst(Product product);
 }

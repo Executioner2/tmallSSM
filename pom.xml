@@ -13,6 +13,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <!--<mysql-version>5.1.49</mysql-version>-->
+    <mysql-version>8.0.22</mysql-version>
   </properties>
 
   <dependencies>
@@ -67,7 +69,7 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.49</version>
+      <version>${mysql-version}</version>
     </dependency>
 
     <!--druid-->

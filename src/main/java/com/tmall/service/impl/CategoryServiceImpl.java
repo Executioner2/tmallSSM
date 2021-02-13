@@ -3,8 +3,10 @@ package com.tmall.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.tmall.dao.CategoryDao;
 import com.tmall.dao.ProductDao;
+import com.tmall.dao.ProductImageDao;
 import com.tmall.domain.Category;
 import com.tmall.domain.Product;
+import com.tmall.domain.ProductImage;
 import com.tmall.service.CategoryService;
 import com.tmall.utils.PageUtil;
 import com.tmall.utils.UploadFileImage;
@@ -34,6 +36,8 @@ public class CategoryServiceImpl implements CategoryService {
     private ProductDao productDao;
     @Resource
     private PageUtil pageUtil;
+    @Resource
+    private ProductImageDao productImageDao;
 
     @Override
     @Transactional
@@ -104,9 +108,15 @@ public class CategoryServiceImpl implements CategoryService {
             int rows = 8;
             PageHelper.offsetPage(0, 64);
             List<Product> products = productDao.listProduct(map);
+            // 获取第一张产品缩略图
+            for (Product p : products) {
+                ProductImage productImageFirst = productImageDao.queryProductImageFirst(p);
+                p.setSingleImageFirst(productImageFirst);
+            }
+
             categories.get(i).setProducts(products);
 
-            //设置productsByRow
+            // 设置productsByRow
             for (int j = 0; j < products.size(); j += rows) {
                 int size = j + rows;
                 size = size > products.size() ? products.size() : size;

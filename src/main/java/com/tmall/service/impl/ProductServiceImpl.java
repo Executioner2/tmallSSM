@@ -3,6 +3,7 @@ package com.tmall.service.impl;
 import com.tmall.dao.*;
 import com.tmall.domain.Category;
 import com.tmall.domain.Product;
+import com.tmall.domain.ProductImage;
 import com.tmall.service.ProductService;
 import com.tmall.service.ReviewService;
 import com.tmall.utils.PageUtil;
@@ -46,6 +47,12 @@ public class ProductServiceImpl implements ProductService {
 
         param.put("category", category);
         List<Product> products = productDao.listProduct(param);
+        // 获取第一张产品缩略图
+        for (Product p : products) {
+            ProductImage productImageFirst = productImageDao.queryProductImageFirst(p);
+            p.setSingleImageFirst(productImageFirst);
+        }
+
         pageUtil.setUri("classify?id="+category.getId()+"&");
         map.put("products", products);
         map.put("category", categoryDao.queryCategory(category));
@@ -58,6 +65,11 @@ public class ProductServiceImpl implements ProductService {
         Map<String, Object> param = new HashMap<>();
         param.put("keyword", "%" + keyword + "%");
         List<Product> products = productDao.listProduct(param);
+        // 获取第一张产品缩略图
+        for (Product p : products) {
+            ProductImage productImageFirst = productImageDao.queryProductImageFirst(p);
+            p.setSingleImageFirst(productImageFirst);
+        }
         map.put("products", products);
         pageUtil.setUri("search?keyword="+keyword+"&");
         return map;
@@ -101,6 +113,11 @@ public class ProductServiceImpl implements ProductService {
         }
 
         products = productDao.listProduct(param);
+        // 获取第一张产品缩略图
+        for (Product p : products) {
+            ProductImage productImageFirst = productImageDao.queryProductImageFirst(p);
+            p.setSingleImageFirst(productImageFirst);
+        }
         map.put("category", categoryDao.queryCategory(category));
         map.put("products", products);
         map.put("sortType", !sortType);

@@ -27,7 +27,13 @@
     <!--这里放注册页面主体-->
     <script>
         $(function () {
+            $("#username").focus();
             $("#registerPage #submitBtn").click(register);
+            $(window).keyup(function (event) {
+                if(event.keyCode == 13){
+                    register();
+                }
+            });
         })
 
         function register() {

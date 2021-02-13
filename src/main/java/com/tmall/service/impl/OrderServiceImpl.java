@@ -3,9 +3,8 @@ package com.tmall.service.impl;
 import com.tmall.dao.OrderDao;
 import com.tmall.dao.OrderItemDao;
 import com.tmall.dao.ProductDao;
-import com.tmall.domain.Order;
-import com.tmall.domain.OrderItem;
-import com.tmall.domain.User;
+import com.tmall.dao.ProductImageDao;
+import com.tmall.domain.*;
 import com.tmall.service.OrderService;
 import com.tmall.utils.PageUtil;
 import com.tmall.utils.RandUtil;
@@ -36,6 +35,8 @@ public class OrderServiceImpl implements OrderService {
     private ProductDao productDao;
     @Resource
     private OrderItemDao orderItemDao;
+    @Resource
+    private ProductImageDao productImageDao;
 
     @Override
     public Map<String, Object> listOrder(Integer pageNum, Integer count, User user, String status) {
@@ -49,6 +50,13 @@ public class OrderServiceImpl implements OrderService {
             pageUtil.setUri("admin/order/list?");
         }
         for (int i = 0; i < orders.size(); i++, totalMoney = totalNumber = 0) {
+            // 获取第一张产品缩略图
+            List<OrderItem> orderItems = orders.get(i).getOrderItems();
+            for (OrderItem oi : orderItems) {
+                ProductImage productImageFirst = productImageDao.queryProductImageFirst(oi.getProduct());
+                oi.getProduct().setSingleImageFirst(productImageFirst);
+            }
+
             for (int j = 0; j < orders.get(i).getOrderItems().size(); j++) {
                 int number = orders.get(i).getOrderItems().get(j).getNumber();
                 totalMoney += orders.get(i).getOrderItems().get(j).getProduct().getPromotePrice() * number;
@@ -147,11 +155,21 @@ public class OrderServiceImpl implements OrderService {
         if(order == null){
             return null;
         }
+        // 获取第一张产品缩略图
+        List<OrderItem> orderItems = order.getOrderItems();
+        for (OrderItem oi : orderItems) {
+            ProductImage productImageFirst = productImageDao.queryProductImageFirst(oi.getProduct());
+            oi.getProduct().setSingleImageFirst(productImageFirst);
+
+        }
+
         for (int j = 0; j < order.getOrderItems().size(); j++) {
             int number = order.getOrderItems().get(j).getNumber();
             totalPrice += order.getOrderItems().get(j).getProduct().getPromotePrice() * number;
+
         }
         order.setTotalMoney(totalPrice);
+
         return order;
     }
 }

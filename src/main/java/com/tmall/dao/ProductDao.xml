@@ -19,11 +19,6 @@
             <result column="cname" property="name"/>
         </association>
 
-        <association property="singleImageFirst" javaType="ProductImage">
-            <id column="piid" property="id"/>
-            <result column="type" property="type"/>
-        </association>
-
         <collection property="propertyValues" ofType="PropertyValue">
             <id column="ptvid" property="id"/>
             <result column="value" property="value"/>
@@ -49,9 +44,7 @@
             p.stock,
             p.createDate pcreateDate,
             salesVolume,
-            reviewNumber,
-            pi.id piid,
-            type
+            reviewNumber
         FROM
             product p
         LEFT JOIN (
@@ -79,17 +72,6 @@
             GROUP BY
                 pid
         ) d ON d.pid = p.id
-        LEFT JOIN (
-            SELECT
-                id,
-                pid,
-                type
-            FROM
-                productImage
-            WHERE
-                type = 'singleImage'
-            GROUP BY pid
-        ) pi ON pi.pid = p.id
         <where>
             <if test="category != null">
                 p.cid = #{category.id}
